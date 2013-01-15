@@ -35,7 +35,7 @@ class MockFetcher
   end
 end
 
-RotsServerUrl = 'http://localhost:9292'
+RotsServerUrl = 'http://localhost:1124'
 
 RotsApp = Rack::Builder.new do
   require 'rots'
@@ -249,6 +249,24 @@ class TestOpenID < Test::Unit::TestCase
     assert_equal '/', @response.headers['X-Path']
     assert_equal 'success', @response.body
   end
+
+  # Rots does not support the Pape extension; uncomment test when it does.
+  #def test_with_pape
+  #  @app = app(
+  #    :'pape_policy_uri' => 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/privatepersonalidentifier'
+  #  )
+  #  process('/', :method => 'GET')
+  #
+  #  location = @response.headers['Location']
+  #  assert_match(/openid.ns.pape/, location)
+  #  assert_match(/openid.pape.preferred_auth_policies/, location)
+  #
+  #  follow_redirect!
+  #  assert_equal 200, @response.status
+  #  assert_equal 'GET', @response.headers['X-Method']
+  #  assert_equal '/', @response.headers['X-Path']
+  #  assert_equal 'success', @response.body
+  #end
 
   def test_with_immediate_mode_setup_needed
     @app = app(:identifier => "#{RotsServerUrl}/john.doe?openid.success=false", :immediate => true)
